@@ -2,7 +2,7 @@
 # 简单备忘录
 
 基于Golang V1.21，Go-Micro v4，Gin，Gorm  
-基于consul实现服务注册与发现及配置  
+基于Consul实现服务注册中心及配置中心  
 支持gateway和各模块之间的Protobuf RPC通信  
 支持限流熔断机制，JWT token验证，swagger API文档生成  
 基于CentOS7 Docker部署Zipkin链路追踪，Prometheus Grafana监控，Redis登陆缓存，RabbitMQ任务创建消息队列  
@@ -107,6 +107,6 @@ task/
 ```
 
 
-根据`config.ini.example`编写`config/config.ini`
+根据`config.yaml.example`编写`config/config.yaml`
 
 

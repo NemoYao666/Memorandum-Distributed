@@ -2,116 +2,126 @@ package config
 
 import (
 	"fmt"
+	"github.com/hashicorp/consul/api"
+	"io/ioutil"
+	"log"
 
-	"gopkg.in/ini.v1"
+	"gopkg.in/yaml.v2"
 )
 
-var (
-	Db         string
-	DbHost     string
-	DbPort     string
-	DbUser     string
-	DbPassWord string
-	DbName     string
-	Charset    string
+var C *Config
 
-	RabbitMQ         string
-	RabbitMQUser     string
-	RabbitMQPassWord string
-	RabbitMQHost     string
-	RabbitMQPort     string
+// Config 是用来解析 YAML 文件的结构体
+type Config struct {
+	Service struct {
+		Env string `yaml:"Env"`
+	} `yaml:"service"`
 
-	ConsulHost string
-	ConsulPort string
+	Mysql struct {
+		Db         string `yaml:"Db"`
+		DbHost     string `yaml:"DbHost"`
+		DbPort     string `yaml:"DbPort"`
+		DbUser     string `yaml:"DbUser"`
+		DbPassWord string `yaml:"DbPassWord"`
+		DbName     string `yaml:"DbName"`
+		Charset    string `yaml:"Charset"`
+	} `yaml:"mysql"`
 
-	GateWayServiceName    string
-	GateWayServiceAddress string
-	UserServiceName       string
-	UserClientName        string
-	UserServiceAddress    string
-	TaskServiceName       string
-	TaskClientName        string
-	TaskServiceAddress    string
+	RabbitMQ struct {
+		RabbitMQ         string `yaml:"RabbitMQ"`
+		RabbitMQUser     string `yaml:"RabbitMQUser"`
+		RabbitMQPassWord string `yaml:"RabbitMQPassWord"`
+		RabbitMQHost     string `yaml:"RabbitMQHost"`
+		RabbitMQPort     string `yaml:"RabbitMQPort"`
+	} `yaml:"rabbitmq"`
 
-	ZipkinUrl string
+	Consul struct {
+		ConsulHost string `yaml:"ConsulHost"`
+		ConsulPort string `yaml:"ConsulPort"`
+		ConsulKey  string `yaml:"ConsulKey"`
+	} `yaml:"consul"`
 
-	PrometheusGateWayPath        string
-	PrometheusGateWayAddress     string
-	PrometheusUserServicePath    string
-	PrometheusUserServiceAddress string
-	PrometheusTaskServicePath    string
-	PrometheusTaskServiceAddress string
+	Server struct {
+		GateWayServiceName    string `yaml:"GateWayServiceName"`
+		GateWayServiceAddress string `yaml:"GateWayServiceAddress"`
+		UserServiceName       string `yaml:"UserServiceName"`
+		UserClientName        string `yaml:"UserClientName"`
+		UserServiceAddress    string `yaml:"UserServiceAddress"`
+		TaskServiceName       string `yaml:"TaskServiceName"`
+		TaskClientName        string `yaml:"TaskClientName"`
+		TaskServiceAddress    string `yaml:"TaskServiceAddress"`
+	} `yaml:"server"`
 
-	RedisHost     string
-	RedisPort     string
-	RedisPassword string
-	RedisDbName   int
-)
+	Zipkin struct {
+		ZipkinUrl string `yaml:"ZipkinUrl"`
+	} `yaml:"zipkin"`
+
+	Prometheus struct {
+		PrometheusGateWayPath        string `yaml:"PrometheusGateWayPath"`
+		PrometheusGateWayAddress     string `yaml:"PrometheusGateWayAddress"`
+		PrometheusUserServicePath    string `yaml:"PrometheusUserServicePath"`
+		PrometheusUserServiceAddress string `yaml:"PrometheusUserServiceAddress"`
+		PrometheusTaskServicePath    string `yaml:"PrometheusTaskServicePath"`
+		PrometheusTaskServiceAddress string `yaml:"PrometheusTaskServiceAddress"`
+	} `yaml:"prometheus"`
+
+	Redis struct {
+		RedisHost     string `yaml:"RedisHost"`
+		RedisPort     string `yaml:"RedisPort"`
+		RedisPassword string `yaml:"RedisPassword"`
+	} `yaml:"redis"`
+}
 
 func Init() {
-	file, err := ini.Load("./config/config.ini")
+	// 读取 YAML 文件内容
+	fileContent, err := ioutil.ReadFile("./config/config.yaml")
 	if err != nil {
-		fmt.Println("配置文件读取错误，请检查文件路径:", err)
+		log.Fatalf("读取配置文件错误: %v", err)
 	}
-	LoadMysqlData(file)
-	LoadConsul(file)
-	LoadRabbitMQ(file)
-	LoadServer(file)
-	LoadZipkin(file)
-	LoadPrometheus(file)
-	LoadRedisData(file)
-}
 
-func LoadMysqlData(file *ini.File) {
-	Db = file.Section("mysql").Key("Db").String()
-	DbHost = file.Section("mysql").Key("DbHost").String()
-	DbPort = file.Section("mysql").Key("DbPort").String()
-	DbUser = file.Section("mysql").Key("DbUser").String()
-	DbPassWord = file.Section("mysql").Key("DbPassWord").String()
-	DbName = file.Section("mysql").Key("DbName").String()
-	Charset = file.Section("mysql").Key("Charset").String()
-}
+	// 解析 YAML 文件内容
+	var config Config
+	err = yaml.Unmarshal(fileContent, &config)
+	if err != nil {
+		log.Fatalf("解析配置文件错误: %v", err)
+	}
 
-func LoadRabbitMQ(file *ini.File) {
-	RabbitMQ = file.Section("rabbitmq").Key("RabbitMQ").String()
-	RabbitMQUser = file.Section("rabbitmq").Key("RabbitMQUser").String()
-	RabbitMQPassWord = file.Section("rabbitmq").Key("RabbitMQPassWord").String()
-	RabbitMQHost = file.Section("rabbitmq").Key("RabbitMQHost").String()
-	RabbitMQPort = file.Section("rabbitmq").Key("RabbitMQPort").String()
-}
-
-func LoadConsul(file *ini.File) {
-	ConsulHost = file.Section("consul").Key("ConsulHost").String()
-	ConsulPort = file.Section("consul").Key("ConsulPort").String()
-}
-
-func LoadServer(file *ini.File) {
-	GateWayServiceName = file.Section("server").Key("GateWayServiceName").String()
-	GateWayServiceAddress = file.Section("server").Key("GateWayServiceAddress").String()
-	UserServiceName = file.Section("server").Key("UserServiceName").String()
-	UserClientName = file.Section("server").Key("UserClientName").String()
-	UserServiceAddress = file.Section("server").Key("UserServiceAddress").String()
-	TaskServiceName = file.Section("server").Key("TaskServiceName").String()
-	TaskClientName = file.Section("server").Key("TaskClientName").String()
-	TaskServiceAddress = file.Section("server").Key("TaskServiceAddress").String()
-}
-
-func LoadZipkin(file *ini.File) {
-	ZipkinUrl = file.Section("zipkin").Key("ZipkinUrl").String()
-}
-
-func LoadPrometheus(file *ini.File) {
-	PrometheusGateWayPath = file.Section("prometheus").Key("PrometheusGateWayPath").String()
-	PrometheusGateWayAddress = file.Section("prometheus").Key("PrometheusGateWayAddress").String()
-	PrometheusUserServicePath = file.Section("prometheus").Key("PrometheusUserServicePath").String()
-	PrometheusUserServiceAddress = file.Section("prometheus").Key("PrometheusUserServiceAddress").String()
-	PrometheusTaskServicePath = file.Section("prometheus").Key("PrometheusTaskServicePath").String()
-	PrometheusTaskServiceAddress = file.Section("prometheus").Key("PrometheusTaskServiceAddress").String()
+	env := config.Service.Env
+	if env == "dev" {
+		// 设置全局配置
+		SetGlobalConfig(&config)
+	} else if env == "prod" {
+		var configNew = &Config{}
+		configNew.Consul.ConsulHost = config.Consul.ConsulHost
+		configNew.Consul.ConsulPort = config.Consul.ConsulPort
+		configNew.Consul.ConsulKey = config.Consul.ConsulKey
+		LoadConsulConfig(configNew)
+		SetGlobalConfig(configNew)
+	}
 
 }
 
-func LoadRedisData(file *ini.File) {
-	RedisHost = file.Section("redis").Key("RedisHost").String()
-	RedisPort = file.Section("redis").Key("RedisPort").String()
-	RedisPassword = file.Section("redis").Key("RedisPassword").String()
+func SetGlobalConfig(config *Config) {
+	C = config
+	fmt.Println("配置文件加载成功")
+}
+
+func LoadConsulConfig(config *Config) {
+	// 初始化 Consul 客户端
+	consulConfig := api.DefaultConfig()
+	consulConfig.Address = fmt.Sprintf("%s:%s", config.Consul.ConsulHost, config.Consul.ConsulPort)
+	consulClient, err := api.NewClient(consulConfig)
+	if err != nil {
+		log.Fatalf("初始化 Consul 客户端失败: %v", err)
+	}
+	// 从 Consul 中获取配置
+	kvPair, _, err := consulClient.KV().Get(config.Consul.ConsulKey, nil)
+	if err != nil {
+		log.Fatalf("从 Consul 获取配置失败: %v", err)
+	}
+	// 反序列化 YAML 配置
+	err = yaml.Unmarshal(kvPair.Value, &config)
+	if err != nil {
+		log.Fatalf("解析 YAML 配置失败: %v", err)
+	}
 }

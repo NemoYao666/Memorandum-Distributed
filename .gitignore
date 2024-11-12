@@ -13,7 +13,7 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-config/config.ini
+config/config.yaml
 app/user/go.sum
 app/user/repository/mq-server/go.sum
 app/task/go.sum

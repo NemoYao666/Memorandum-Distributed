@@ -15,14 +15,14 @@ func PrometheusMiddleware() gin.HandlerFunc {
 		duration := time.Since(start).Seconds()
 
 		metrics.GateWayRequestCounter.WithLabelValues(
-			config.GateWayServiceName,
+			config.C.Server.GateWayServiceName,
 			c.Request.Method,
 			c.FullPath(),
 			strconv.Itoa(c.Writer.Status()),
 		).Inc()
 
 		metrics.GateWayRequestDuration.WithLabelValues(
-			config.GateWayServiceName,
+			config.C.Server.GateWayServiceName,
 			c.Request.Method,
 			c.FullPath(),
 		).Observe(duration)

@@ -12,7 +12,7 @@ import (
 // GetTracer 初始化追踪器
 func GetTracer(serviceName string, host string) opentracing.Tracer {
 
-	url := config.ZipkinUrl
+	url := config.C.Zipkin.ZipkinUrl
 	zipkinReporter := zipkinhttp.NewReporter(url)
 
 	endpoint, err := zipkin.NewEndpoint(serviceName, host)

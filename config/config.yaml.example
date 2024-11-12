@@ -1,0 +1,49 @@
+service:
+  AppMode: debug
+  HttpPort: ":4000"
+
+mysql:
+  Db: mysql
+  DbHost: 127.0.0.1
+  DbPort: 3306
+  DbUser: micro_todolist
+  DbPassWord: micro_todolist
+  DbName: micro_todolist
+  Charset: utf8mb4
+
+rabbitmq:
+  RabbitMQ: amqp
+  RabbitMQUser: guest
+  RabbitMQPassWord: guest
+  RabbitMQHost: localhost
+  RabbitMQPort: 5672
+
+consul:
+  ConsulHost: localhost
+  ConsulPort: 8500
+
+server:
+  GateWayServiceName: httpService
+  GateWayServiceAddress: 127.0.0.1:4000
+  UserServiceName: rpcUserService
+  UserClientName: userService.client
+  UserServiceAddress: 127.0.0.1:8082
+  TaskServiceName: rpcTaskService
+  TaskClientName: taskService.client
+  TaskServiceAddress: 127.0.0.1:8083
+
+zipkin:
+  ZipkinUrl: http://127.0.0.1:9411/api/v2/spans
+
+prometheus:
+  PrometheusGateWayPath: /metrics
+  PrometheusGateWayAddress: 0.0.0.0:9094
+  PrometheusUserServicePath: /metrics
+  PrometheusUserServiceAddress: 0.0.0.0:9092
+  PrometheusTaskServicePath: /metrics
+  PrometheusTaskServiceAddress: 0.0.0.0:9093
+
+redis:
+  RedisHost: localhost
+  RedisPort: 6379
+  RedisPassword: micro_todolist

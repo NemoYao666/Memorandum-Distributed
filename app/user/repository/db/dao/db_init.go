@@ -19,12 +19,12 @@ import (
 var _db *gorm.DB
 
 func InitDB() {
-	host := config.DbHost
-	port := config.DbPort
-	database := config.DbName
-	username := config.DbUser
-	password := config.DbPassWord
-	charset := config.Charset
+	host := config.C.Mysql.DbHost
+	port := config.C.Mysql.DbPort
+	database := config.C.Mysql.DbName
+	username := config.C.Mysql.DbUser
+	password := config.C.Mysql.DbPassWord
+	charset := config.C.Mysql.Charset
 	dsn := strings.Join([]string{username, ":", password, "@tcp(", host, ":", port, ")/", database, "?charset=" + charset + "&parseTime=true"}, "")
 	err := Database(dsn)
 	if err != nil {

@@ -19,18 +19,18 @@ func main() {
 	dao.InitDB()
 
 	// consul
-	consulReg := consul.NewRegistry(registry.Addrs(fmt.Sprintf("%s:%s", config.ConsulHost, config.ConsulPort)))
+	consulReg := consul.NewRegistry(registry.Addrs(fmt.Sprintf("%s:%s", config.C.Consul.ConsulHost, config.C.Consul.ConsulPort)))
 
 	// 初始化 Tracer
-	tracer := common.GetTracer(config.UserServiceName, config.UserServiceAddress)
+	tracer := common.GetTracer(config.C.Server.UserServiceName, config.C.Server.UserServiceAddress)
 	tracerHandler := opentracing.NewHandlerWrapper(tracer)
 	// 初始化 Prometheus
-	common.PrometheusBoot(config.PrometheusUserServicePath, config.PrometheusUserServiceAddress)
+	common.PrometheusBoot(config.C.Prometheus.PrometheusUserServicePath, config.C.Prometheus.PrometheusUserServiceAddress)
 
 	// 得到一个微服务实例
 	microService := micro.NewService(
-		micro.Name(config.UserServiceName), // 微服务名字
-		micro.Address(config.UserServiceAddress),
+		micro.Name(config.C.Server.UserServiceName), // 微服务名字
+		micro.Address(config.C.Server.UserServiceAddress),
 		micro.Registry(consulReg), // consul注册件
 		micro.WrapHandler(tracerHandler),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),

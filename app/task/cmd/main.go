@@ -29,18 +29,18 @@ func main() {
 	loadingScript()
 
 	// consul
-	consulReg := consul.NewRegistry(registry.Addrs(fmt.Sprintf("%s:%s", config.ConsulHost, config.ConsulPort)))
+	consulReg := consul.NewRegistry(registry.Addrs(fmt.Sprintf("%s:%s", config.C.Consul.ConsulHost, config.C.Consul.ConsulPort)))
 
 	// 初始化 Tracer
-	tracer := common.GetTracer(config.TaskServiceName, config.TaskServiceAddress)
+	tracer := common.GetTracer(config.C.Server.TaskServiceName, config.C.Server.TaskServiceAddress)
 	tracerHandler := opentracing.NewHandlerWrapper(tracer)
 	// 初始化 Prometheus
-	common.PrometheusBoot(config.PrometheusTaskServicePath, config.PrometheusTaskServiceAddress)
+	common.PrometheusBoot(config.C.Prometheus.PrometheusTaskServicePath, config.C.Prometheus.PrometheusTaskServiceAddress)
 
 	// 得到一个微服务实例
 	microService := micro.NewService(
-		micro.Name(config.TaskServiceName), // 微服务名字
-		micro.Address(config.TaskServiceAddress),
+		micro.Name(config.C.Server.TaskServiceName), // 微服务名字
+		micro.Address(config.C.Server.TaskServiceAddress),
 		micro.Registry(consulReg), // consul注册件
 		micro.WrapHandler(tracerHandler),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),

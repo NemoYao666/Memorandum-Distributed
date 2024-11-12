@@ -20,18 +20,19 @@ func main() {
 	cache.InitCache()
 	log.InitLog()
 
+	fmt.Println(config.C.Service.Env)
 	// consul
-	consulReg := consul.NewRegistry(registry.Addrs(fmt.Sprintf("%s:%s", config.ConsulHost, config.ConsulPort)))
+	consulReg := consul.NewRegistry(registry.Addrs(fmt.Sprintf("%s:%s", config.C.Consul.ConsulHost, config.C.Consul.ConsulPort)))
 
 	// 初始化 Tracer
-	tracer := common.GetTracer(config.GateWayServiceName, config.GateWayServiceAddress)
+	tracer := common.GetTracer(config.C.Server.GateWayServiceName, config.C.Server.GateWayServiceAddress)
 	// 初始化 Prometheus
-	common.PrometheusBoot(config.PrometheusGateWayPath, config.PrometheusGateWayAddress)
+	common.PrometheusBoot(config.C.Prometheus.PrometheusGateWayPath, config.C.Prometheus.PrometheusGateWayAddress)
 
 	// 创建微服务实例，使用gin暴露http接口并注册到etcd
 	server := web.NewService(
-		web.Name(config.GateWayServiceName),
-		web.Address(config.GateWayServiceAddress),
+		web.Name(config.C.Server.GateWayServiceName),
+		web.Address(config.C.Server.GateWayServiceAddress),
 		// 将服务调用实例使用gin处理
 		web.Handler(router.NewRouter(tracer)),
 		web.Registry(consulReg),
