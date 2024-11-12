@@ -20,53 +20,34 @@ swagger      http://127.0.0.1:4000/swagger/index.html
 # linux docker
 redis   
 rabbitMQ     http://127.0.0.1:15672
-etcd      
 zipkin       http://127.0.0.1:9411/zipkin
 prometheus   http://127.0.0.1:9090/targets
 # linux server
-etcd-keeper  http://127.0.0.1:8080/etcdkeeper
+consul       http://127.0.0.1:8500
 grafana      http://127.0.0.1:3000/login
 ```
 
   启动流程
 ```shell
-# docker
+# docker linux
 systemctl start docker # redis rabbitMQ auto start
 docker start # zipkin_container_id
 ```  
 
 ```shell
-# consul 
+# consul linux
 cd /opt/consul
 ./start_consul.sh
 ```  
 
 ```shell
-# prometheus 配置抓取路径
+# prometheus linux
+# 配置抓取路径 
 cd /opt/prometheus
 gedit prometheus.yml  # web服务所在的IP
 docker start # prometheus_container_id
 # grafana
 systemctl start grafana-server.service
-```  
-  etcd docker run 备份
-```shell
-# etcd
-docker run -d \
-  --name etcd \
-  --restart on-failure \
-  --privileged \
-  -p 2379:2379 \
-  -e ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379 \
-  -e ETCD_ADVERTISE_CLIENT_URLS=http://0.0.0.0:2379 \
-  -e ALLOW_NONE_AUTHENTICATION=yes \
-  -e ETCD_API=3 \
-  -e ETCD_CERT_FILE="/path/to/server.crt" \
-  -e ETCD_KEY_FILE="/path/to/server.key" \
-  -e ETCD_AUTH="simple" \
-  -e ETCD_AUTH_USER="todolist" \
-  -e ETCD_AUTH_PASSWORD="todolist" \
-  quay.io/coreos/etcd:v3.5.5
 ```
   
 ****
