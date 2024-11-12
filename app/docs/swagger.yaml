@@ -1,0 +1,259 @@
+definitions:
+  pb.TaskRequest:
+    properties:
+      content:
+        description: '@inject_tag: json:"content" form:"content"'
+        type: string
+      end_time:
+        description: '@inject_tag: json:"end_time" form:"end_time"'
+        type: integer
+      id:
+        description: '@inject_tag: json:"id" form:"id"'
+        type: integer
+      limit:
+        description: '@inject_tag: json:"limit" form:"limit"'
+        type: integer
+      start:
+        description: '@inject_tag: json:"start" form:"start"'
+        type: integer
+      start_time:
+        description: '@inject_tag: json:"start_time" form:"start_time"'
+        type: integer
+      status:
+        description: '@inject_tag: json:"status" form:"status"'
+        type: integer
+      title:
+        description: '@inject_tag: json:"title" form:"title"'
+        type: string
+      uid:
+        description: '@inject_tag: json:"uid" form:"uid"'
+        type: integer
+    type: object
+  pb.UserRequest:
+    properties:
+      password:
+        description: '@inject_tag: name:"password" json:"password" form:"password"
+          uri:"password"'
+        type: string
+      password_confirm:
+        description: '@inject_tag: name:"password_confirm" json:"password_confirm"
+          form:"password_confirm" uri:"password_confirm"'
+        type: string
+      user_name:
+        description: '@inject_tag: name:"user_name" json:"user_name" form:"user_name"
+          uri:"user_name"'
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/task:
+    post:
+      consumes:
+      - application/json
+      description: CreateTaskDescription
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: task
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/pb.TaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: bad request
+          schema:
+            type: string
+      summary: CreateTask
+      tags:
+      - task
+  /api/v1/task/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: DeleteTaskDescription
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: bad request
+          schema:
+            type: string
+      summary: DeleteTask
+      tags:
+      - task
+    get:
+      consumes:
+      - application/json
+      description: GetTaskDescription
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: bad request
+          schema:
+            type: string
+      summary: GetTask
+      tags:
+      - task
+    put:
+      consumes:
+      - application/json
+      description: UpdateTaskDescription
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: task
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/pb.TaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: bad request
+          schema:
+            type: string
+      summary: UpdateTask
+      tags:
+      - task
+  /api/v1/tasks:
+    get:
+      consumes:
+      - application/json
+      description: GetTasksListDescription
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: bad request
+          schema:
+            type: string
+      summary: GetTasksList
+      tags:
+      - task
+  /api/v1/user/login:
+    post:
+      consumes:
+      - application/json
+      description: UserLoginDescription
+      parameters:
+      - description: pb.UserRequest
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/pb.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: bad request
+          schema:
+            type: string
+      summary: UserLogin
+      tags:
+      - user
+  /api/v1/user/register:
+    post:
+      consumes:
+      - application/json
+      description: UserRegisterDescription
+      parameters:
+      - description: pb.UserRequest
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/pb.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: bad request
+          schema:
+            type: string
+      summary: UserRegister
+      tags:
+      - user
+swagger: "2.0"
