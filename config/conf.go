@@ -88,9 +88,10 @@ func Init() {
 
 	env := config.Service.Env
 	if env == "dev" {
-		// 设置全局配置
+		// 设置全局配置为本地配置
 		SetGlobalConfig(&config)
-	} else if env == "prod" {
+	} else {
+		// 设置全局配置为Consul对应Env下的配置
 		var configNew = &Config{}
 		configNew.Consul.ConsulHost = config.Consul.ConsulHost
 		configNew.Consul.ConsulPort = config.Consul.ConsulPort

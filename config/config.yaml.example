@@ -1,6 +1,6 @@
+
 service:
-  AppMode: debug
-  HttpPort: ":4000"
+  Env: dev # dev
 
 mysql:
   Db: mysql
@@ -21,6 +21,7 @@ rabbitmq:
 consul:
   ConsulHost: localhost
   ConsulPort: 8500
+  ConsulKey: /go-micro/config-dev
 
 server:
   GateWayServiceName: httpService

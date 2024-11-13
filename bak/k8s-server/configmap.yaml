@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap # ConfigMap 名称
+data:
+  config.yaml: |
+    service:
+      Env: prod
+
+    consul:
+      ConsulHost: 192.168.88.105
+      ConsulPort: 8500
+      ConsulKey: /go-micro/config-prod
+

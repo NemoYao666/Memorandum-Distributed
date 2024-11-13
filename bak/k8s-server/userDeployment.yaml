@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment # Deployment就是管理Pod资源的对象
+metadata:
+  name: user # Pod名称
+  labels:
+    app: user # Pod标签 为service提供负载均衡使用
+spec:
+  replicas: 1 # 副本为1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      containers:
+      - name: user # 容器名称
+        image: micro-todolist-k8s/user:latest # 用刚才生成的本地镜像
+        imagePullPolicy: Never # 不拉取，从本地构建
+        ports:
+        - containerPort: 8082 # 容器端口
+        volumeMounts:
+        - name: config-volume # 挂载配置文件
+          mountPath: /usr/local/bin/config/config.yaml
+          subPath: config.yaml
+      volumes:
+      - name: config-volume
+        configMap:
+          name: configmap # ConfigMap 名称
+          items:
+          - key: config.yaml
+            path: config.yaml
