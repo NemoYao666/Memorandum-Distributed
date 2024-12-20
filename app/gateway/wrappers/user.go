@@ -5,6 +5,7 @@ import (
 
 	"github.com/afex/hystrix-go/hystrix"
 	"go-micro.dev/v4/client"
+	"golang.org/x/time/rate"
 )
 
 type userWrapper struct {
@@ -12,6 +13,13 @@ type userWrapper struct {
 }
 
 func (wrapper *userWrapper) Call(ctx context.Context, req client.Request, resp interface{}, opts ...client.CallOption) error {
+
+	// 限流器，每秒5个请求，最多允许10个令牌
+	var limiter = rate.NewLimiter(5, 10)
+	if err := limiter.Wait(ctx); err != nil {
+		return err
+	}
+
 	cmdName := req.Service() + "." + req.Endpoint()
 	config := hystrix.CommandConfig{
 		Timeout:                30000,

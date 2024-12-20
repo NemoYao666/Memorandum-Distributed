@@ -25,8 +25,8 @@ prometheus     http://192.168.88.105:9090/targets
 # linux server IP:105
 consul         http://192.168.88.105:8500
 grafana        http://192.168.88.105:3000/login
-# linux k8s IP:106,107,108
-swagger        http://192.168.88.106:4000/swagger/index.html
+# linux k8s IP:106,107,108; gateway NodePort暴露端口为30080,本地为4000
+swagger        http://192.168.88.106:30080/swagger/index.html
 k8s dashboard  https://192.168.88.106:<port>
 ```
 
@@ -131,6 +131,8 @@ kubectl apply -f dashboard-token.yaml
 kubectl get secret -n kubernetes-dashboard
 # 查看名为admin-user-token-????? 的secret 作为 token
 kubectl describe secret admin-user-token-????? -n kubernetes-dashboard
+# 查看 dashboard service 暴露的端口
+kubectl get svc -A|grep dashboard
 ```
 应用 k8s 配置 IP:106
 ```shell

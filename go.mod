@@ -12,6 +12,7 @@ require (
 	github.com/go-micro/plugins/v4/registry/consul v1.2.1
 	github.com/go-micro/plugins/v4/wrapper/monitoring/prometheus v1.2.0
 	github.com/go-micro/plugins/v4/wrapper/trace/opentracing v1.2.0
+	github.com/hashicorp/consul/api v1.9.0
 	github.com/jinzhu/gorm v1.9.16
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/openzipkin-contrib/zipkin-go-opentracing v0.5.0
@@ -26,6 +27,7 @@ require (
 	github.com/swaggo/swag v1.16.3
 	go-micro.dev/v4 v4.10.2
 	golang.org/x/crypto v0.26.0
+	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba
 	google.golang.org/protobuf v1.34.2
 	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/mysql v1.5.1
@@ -75,7 +77,6 @@ require (
 	github.com/gorilla/handlers v1.5.1 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/gorilla/sessions v1.2.1 // indirect
-	github.com/hashicorp/consul/api v1.9.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.1 // indirect
 	github.com/hashicorp/go-hclog v0.12.0 // indirect
 	github.com/hashicorp/go-immutable-radix v1.0.0 // indirect

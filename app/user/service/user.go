@@ -19,7 +19,8 @@ var UserSrvOnce sync.Once
 type UserSrv struct {
 }
 
-// GetUserSrv 懒汉式单例模式 lazy-loading --> 懒汉式:携程进入，只执行一次
+// GetUserSrv 懒汉式单例模式 lazy-loading
+// 函数只有在第一次调用时才会创建 UserSrvIns 实例，之后每次调用都会返回同一个实例。线程安全。
 func GetUserSrv() *UserSrv {
 	UserSrvOnce.Do(func() {
 		UserSrvIns = &UserSrv{}
@@ -27,7 +28,9 @@ func GetUserSrv() *UserSrv {
 	return UserSrvIns
 }
 
-// GetUserSrvHungry 饿汉式式单例模式 --> 饿汉式:携程进入，没有直接生成，资源浪费
+// GetUserSrvHungry 饿汉式式单例模式 eager-loading
+// 在类加载时就创建实例对象，不论是否需要。函数在第一次调用时会检查 UserSrvIns 是否为 nil，如果是，则创建新实例并返回。以后每次调用都会返回已经创建的实例。
+// 不保证线程安全。在并发环境下可能出现多个线程同时创建实例的问题。
 func GetUserSrvHungry() *UserSrv {
 	if UserSrvIns == nil {
 		UserSrvIns = new(UserSrv)

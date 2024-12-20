@@ -6,7 +6,7 @@ import (
 
 	"github.com/afex/hystrix-go/hystrix"
 	"go-micro.dev/v4/client"
-
+	"golang.org/x/time/rate"
 	"micro-todoList-k8s/idl/pb"
 )
 
@@ -39,6 +39,13 @@ type TaskWrapper struct {
 }
 
 func (wrapper *TaskWrapper) Call(ctx context.Context, req client.Request, rsp interface{}, opts ...client.CallOption) error {
+
+	// 限流器，每秒10个请求，最多允许20个令牌
+	var limiter = rate.NewLimiter(10, 20)
+	if err := limiter.Wait(ctx); err != nil {
+		return err
+	}
+
 	cmdName := req.Service() + "." + req.Endpoint()
 	config := hystrix.CommandConfig{
 		Timeout:                3000,

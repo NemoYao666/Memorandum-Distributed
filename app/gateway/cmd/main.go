@@ -29,7 +29,7 @@ func main() {
 	// 初始化 Prometheus
 	common.PrometheusBoot(config.C.Prometheus.PrometheusGateWayPath, config.C.Prometheus.PrometheusGateWayAddress)
 
-	// 创建微服务实例，使用gin暴露http接口并注册到etcd
+	// 创建微服务实例，使用gin暴露http接口并注册到consul
 	server := web.NewService(
 		web.Name(config.C.Server.GateWayServiceName),
 		web.Address(config.C.Server.GateWayServiceAddress),

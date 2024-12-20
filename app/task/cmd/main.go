@@ -54,7 +54,7 @@ func main() {
 	_ = microService.Run()
 }
 
-// 异步启动监听消息队列
+// 异步启动监听消息队列，task创建落库
 func loadingScript() {
 	ctx := context.Background()
 	go script.TaskCreateSync(ctx)
