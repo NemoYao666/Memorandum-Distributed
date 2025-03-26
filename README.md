@@ -6,7 +6,7 @@
 基于Consul实现服务注册中心及配置中心  
 支持Gateway和各微服务模块之间的Protobuf RPC通信  
 支持限流熔断机制，JWT token验证，swagger API文档生成  
-基于Docker部署Zipkin链路追踪，Prometheus Grafana监控，Redis登陆缓存，RabbitMQ任务创建消息队列  
+基于Docker部署Nginx反向代理网关，Zipkin链路追踪，Prometheus Grafana监控，Redis登陆缓存，RabbitMQ任务创建消息队列  
 
 ****
 
@@ -18,6 +18,7 @@
 # win
 mysql 
 # linux docker IP:105
+nginx
 redis   
 rabbitMQ       http://192.168.88.105:15672
 zipkin         http://192.168.88.105:9411/zipkin
@@ -27,6 +28,9 @@ consul         http://192.168.88.105:8500
 grafana        http://192.168.88.105:3000/login
 # linux k8s IP:106,107,108; gateway NodePort暴露端口为30080,本地为4000
 swagger        http://192.168.88.106:30080/swagger/index.html
+# nginx反向代理网关后，IP:105
+swagger        http://192.168.88.105/swagger/index.html
+# linux k8s IP:106,107,108; port 见 kubectl get svc -A|grep dashboard
 k8s dashboard  https://192.168.88.106:<port>
 ```
 
@@ -35,6 +39,7 @@ k8s dashboard  https://192.168.88.106:<port>
 # docker linux IP:105
 systemctl start docker # redis rabbitMQ auto start
 docker start # zipkin_container_id
+docker start # nginx_container_id
 ```  
 
 ```shell
@@ -173,7 +178,7 @@ micro-todolist/
 │   ├── gateway           // 网关
 │   ├── task              // 任务模块微服务
 │   └── user              // 用户模块服务
-├── bak                   // k8s集群运行相关文件备份
+├── bak                   // 相关中间件部署配置文件备份
 ├── config                // 配置文件
 ├── consts                // 定义的常量
 ├── doc                   // 接口文档

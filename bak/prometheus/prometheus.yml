@@ -1,0 +1,28 @@
+scrape_configs:
+  - job_name: 'todoList_user'
+    scrape_interval: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: 
+        - '192.168.88.106:30992'
+        - '192.168.88.107:30992'
+        - '192.168.88.108:30992'
+
+  - job_name: 'todoList_task'
+    scrape_interval: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: 
+        - '192.168.88.106:30993'
+        - '192.168.88.107:30993'
+        - '192.168.88.108:30993'
+
+  - job_name: 'todoList_gateway'
+    scrape_interval: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: 
+        - '192.168.88.106:30994'
+        - '192.168.88.107:30994'
+        - '192.168.88.108:30994'
+
